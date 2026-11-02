@@ -26,3 +26,17 @@ Public / unlisted / private visibility is represented in the local preview; secu
 6. Open the same FORGE website address. The installed home-screen PWA should update its cached page when it next connects and refreshes. If the update banner appears, tap **Update**.
 
 Keep the same repository and published URL. Do not delete the existing home-screen app. If Android continues showing an old page, close FORGE, open it again while online, and allow the service worker to refresh.
+
+
+## Phone sign-in
+This build adds a phone number + SMS OTP sign-in gate using Firebase Authentication.
+The Firebase Web App configuration for project `forgeworld6` is now inserted in
+`index.html`. Phone OTP still needs to be tested on the published HTTPS domain.
+Confirm Phone sign-in is enabled and `forgeworld6.github.io` is listed under
+Authentication > Settings > Authorized domains. Phone authentication uses
+reCAPTCHA and is subject to Firebase SMS quotas. Never add a service-account
+private key to website code.
+
+Firestore rules are still deny-all, and Firebase Storage is not configured yet.
+This update only connects the Firebase client and phone-auth flow; it does not
+complete cloud profiles, projects, uploads, messaging or other backend features.

@@ -36,9 +36,44 @@ main{padding:22px 18px 35px}.eyebrow{color:var(--orange);font-size:11px;font-wei
 .more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.feature-card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:16px;min-width:0}.feature-card h3{font-size:14px;margin:7px 0 4px}.feature-card p{font-size:12px;color:var(--muted);margin:0}.feature-icon{width:38px;height:38px;border-radius:12px;background:var(--soft);color:var(--orange);display:grid;place-items:center;font-size:19px}.row-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.row-item:last-child{border:0}.row-item b{font-size:13px}.row-item small{display:block;color:var(--muted);font-size:11px}.switch{accent-color:var(--orange);width:20px;height:20px}.pill-note{font-size:10px;color:var(--orange);background:var(--soft);border-radius:20px;padding:4px 8px}.page-intro{padding:20px;border-radius:18px;background:linear-gradient(130deg,#24150d,#111);border:1px solid #432817;margin-bottom:18px}.page-intro h2{margin:5px 0;font-size:24px}.page-intro p{color:#c2b7af;font-size:12px;margin:0}.demo-label{font-size:10px;letter-spacing:1px;color:var(--orange);font-weight:800}.notice{padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:var(--panel);font-size:12px;color:var(--muted);margin:12px 0}.bottom{overflow-x:auto;gap:3px;justify-content:flex-start}.nav{min-width:64px;flex:1}.nav span{font-size:17px}.nav{font-size:9px;padding:3px 6px}.update-banner{display:none;position:fixed;z-index:40;bottom:78px;left:12px;right:12px;background:var(--panel);border:1px solid var(--orange);border-radius:14px;padding:12px 14px;box-shadow:0 12px 35px #0005;align-items:center;justify-content:space-between;gap:10px;font-size:12px}.update-banner.show{display:flex}
 @media(min-width:700px){.bottom{justify-content:space-around}.nav{min-width:70px}.more-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.update-banner{left:auto;right:24px;bottom:24px;width:360px}}
 @media(max-width:390px){.nav{min-width:54px;font-size:8px}.nav span{font-size:16px}.more-grid{grid-template-columns:1fr}}
+
+#authGate{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:22px;background:var(--bg)}
+#authGate .auth-card{width:min(100%,420px);padding:26px;border:1px solid var(--line);border-radius:24px;background:var(--panel);box-shadow:0 20px 70px #0005}
+#authGate .auth-logo{width:72px;height:72px;object-fit:cover;border-radius:18px;display:block;margin:0 auto 18px}
+#authGate h1{text-align:center;font-size:25px;margin:0 0 5px;letter-spacing:1px}
+#authGate .auth-sub{text-align:center;color:var(--muted);font-size:13px;margin:0 0 22px}
+#authGate .auth-field{display:block;margin:13px 0}
+#authGate .auth-field span{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+#authGate input{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--txt);outline:none}
+#authGate input:focus{border-color:var(--orange)}
+#authGate .auth-action{width:100%;margin-top:12px}
+#authGate .auth-status{font-size:12px;line-height:1.5;color:var(--muted);margin-top:14px;min-height:18px;text-align:center}
+#authGate .auth-status.error{color:#ef7777}
+#authGate .auth-status.ok{color:#56c58b}
+#authGate .auth-step[hidden]{display:none}
+#authGate .auth-note{font-size:11px;color:var(--muted);text-align:center;margin-top:17px}
 </style></head>
-<body><div class="app">
-<header><div class="brand"><img class="brandmark" src="icon-forge-512.png" alt="FORGE logo"><div>FORGE<small>BUILD. SHOWCASE. INSPIRE.</small></div></div><div class="top-actions"><button class="icon" id="themeBtn" aria-label="Toggle theme">☼</button><button class="icon" id="addTop" aria-label="Add project">＋</button></div></header>
+<body>
+<div id="authGate" role="main" aria-label="FORGE phone sign in">
+ <div class="auth-card">
+  <img class="auth-logo" src="icon-forge-512.png" alt="FORGE logo">
+  <h1>FORGE</h1><p class="auth-sub">Sign in with your mobile number</p>
+  <div id="authPhoneStep" class="auth-step">
+   <label class="auth-field"><span>Mobile number (include country code)</span><input id="authPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91 9876543210"></label>
+   <div id="recaptcha-container"></div>
+   <button class="btn auth-action" id="sendOtpBtn" type="button">Send OTP</button>
+  </div>
+  <div id="authOtpStep" class="auth-step" hidden>
+   <label class="auth-field"><span>6-digit verification code</span><input id="authOtp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Enter OTP"></label>
+   <button class="btn auth-action" id="verifyOtpBtn" type="button">Verify and continue</button>
+   <button class="btn secondary auth-action" id="changePhoneBtn" type="button">Change phone number</button>
+  </div>
+  <div id="authStatus" class="auth-status" aria-live="polite">Checking sign-in setup…</div>
+  <p class="auth-note">Your phone number is used to verify access to your FORGE account.</p>
+ </div>
+</div>
+<div class="app" id="forgeApp" style="display:none">
+<header><div class="brand"><img class="brandmark" src="icon-forge-512.png" alt="FORGE logo"><div>FORGE<small>BUILD. SHOWCASE. INSPIRE.</small></div></div><div class="top-actions"><span id="authUser"></span><button class="icon" id="logoutBtn" aria-label="Log out" title="Log out">⇥</button><button class="icon" id="themeBtn" aria-label="Toggle theme">☼</button><button class="icon" id="addTop" aria-label="Add project">＋</button></div></header>
 <main><div class="notice"><b>FORGE V1 PREVIEW</b> · This update prepares the interface. Secure multi-user accounts, cloud uploads, messaging and community activity will activate after Firebase integration.</div>
 <section id="home" class="page active">
 <div class="hero"><div class="hero-copy"><div class="eyebrow">YOUR CREATIVE WORKSPACE</div><h1>YOUR IDEAS<br>DESERVE TO <span>BE SEEN.</span></h1><p>A personal space to build, organize and showcase everything you create.</p><button class="btn" id="heroAdd">＋ Add your first project</button></div></div>
@@ -95,4 +130,105 @@ $('settingsTheme').onclick=()=>$('themeBtn').click();
 ['publicProfile','showBio'].forEach(id=>{const el=$(id);el.checked=localStorage.getItem('forge_'+id)!=='false';el.onchange=()=>localStorage.setItem('forge_'+id,String(el.checked))});
 $('dashProjects').textContent=db.length;
 
-</script></body></html>
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+/* Paste your Firebase Web App config here (Project settings > Your apps).
+   Never put a service-account private key in browser code. */
+const firebaseConfig = {
+  apiKey: "AIzaSyCyq2ujplmYRK0yCg2DD-VrIQFn_OWRKSI",
+  authDomain: "forgeworld6.firebaseapp.com",
+  projectId: "forgeworld6",
+  storageBucket: "forgeworld6.firebasestorage.app",
+  messagingSenderId: "502290124501",
+  appId: "1:502290124501:web:c2315611fc6f2dc19edc5c",
+  measurementId: "G-5J2SBH4R09"
+};
+const $auth = id => document.getElementById(id);
+const gate = $auth("authGate"), shell = $auth("forgeApp"), statusBox = $auth("authStatus");
+const phoneStep = $auth("authPhoneStep"), otpStep = $auth("authOtpStep");
+const phoneInput = $auth("authPhone"), otpInput = $auth("authOtp");
+const sendBtn = $auth("sendOtpBtn"), verifyBtn = $auth("verifyOtpBtn");
+const changeBtn = $auth("changePhoneBtn"), logoutBtn = $auth("logoutBtn");
+let auth, confirmation, verifier;
+
+function status(message, kind="") {
+  statusBox.textContent = message;
+  statusBox.className = "auth-status" + (kind ? " " + kind : "");
+}
+function ready() {
+ return firebaseConfig.apiKey !== "PASTE_API_KEY_HERE" &&
+        firebaseConfig.projectId !== "PASTE_PROJECT_ID_HERE" &&
+        firebaseConfig.appId !== "PASTE_APP_ID_HERE";
+}
+function clearCaptcha() {
+ if (verifier) { try { verifier.clear(); } catch(e) {} verifier = null; }
+ $auth("recaptcha-container").innerHTML = "";
+}
+if (!ready()) {
+ status("Firebase Web App configuration is missing. Add your project config to activate phone OTP.", "error");
+ sendBtn.disabled = true;
+ sendBtn.textContent = "Firebase setup required";
+} else {
+ try {
+  auth = getAuth(initializeApp(firebaseConfig));
+  onAuthStateChanged(auth, user => {
+   if (user) {
+    gate.style.display = "none"; shell.style.display = "";
+    $auth("authUser").textContent = user.phoneNumber || "Signed in";
+   } else {
+    shell.style.display = "none"; gate.style.display = "flex";
+    $auth("authUser").textContent = "";
+   }
+  });
+  status("Enter your phone number with country code.");
+ } catch(e) { status("Firebase initialization failed. Check your Web App config.", "error"); }
+
+ sendBtn.addEventListener("click", async () => {
+  const phone = phoneInput.value.trim();
+  if (!/^\+[1-9]\d{7,14}$/.test(phone)) {
+   status("Enter a valid number with country code, for example +91XXXXXXXXXX.", "error"); return;
+  }
+  sendBtn.disabled = true;
+  try {
+   clearCaptcha();
+   verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+    size: "normal",
+    "expired-callback": () => status("reCAPTCHA expired. Please try again.", "error")
+   });
+   await verifier.render();
+   confirmation = await signInWithPhoneNumber(auth, phone, verifier);
+   phoneStep.hidden = true; otpStep.hidden = false;
+   status("OTP sent. Check your SMS messages.", "ok"); otpInput.focus();
+  } catch(e) {
+   clearCaptcha();
+   const map = {
+    "auth/invalid-phone-number":"That phone number is not valid.",
+    "auth/too-many-requests":"Too many attempts. Please try again later.",
+    "auth/quota-exceeded":"SMS quota reached. Try again later."
+   };
+   status(map[e.code] || "Could not send OTP. Check Firebase Phone sign-in, authorized domain and internet connection.", "error");
+  } finally { sendBtn.disabled = false; }
+ });
+ verifyBtn.addEventListener("click", async () => {
+  const code = otpInput.value.trim();
+  if (!/^\d{6}$/.test(code)) { status("Enter the 6-digit code from your SMS.", "error"); return; }
+  verifyBtn.disabled = true;
+  try { await confirmation.confirm(code); status("Phone verified. Opening FORGE…", "ok"); }
+  catch(e) { status(e.code === "auth/invalid-verification-code" ? "Incorrect OTP. Try again." : "Verification failed. Request a new code.", "error"); }
+  finally { verifyBtn.disabled = false; }
+ });
+ changeBtn.addEventListener("click", () => {
+  confirmation = null; otpInput.value = ""; otpStep.hidden = true; phoneStep.hidden = false;
+  clearCaptcha(); status("Enter your phone number again.");
+ });
+ logoutBtn.addEventListener("click", async () => {
+  try { await signOut(auth); } catch(e) { alert("Could not sign out. Please try again."); }
+ });
+}
+</script>
+
+</body></html>
