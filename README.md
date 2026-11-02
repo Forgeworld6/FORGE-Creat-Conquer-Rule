@@ -1,31 +1,28 @@
-# FORGE — Personal Android app
+# FORGE — Build. Showcase. Inspire.
 
-This is a personal, offline-first web app. Projects, profile, likes, bookmarks and theme are saved in this browser on your device using local storage. It does not use a public account, backend, or cloud sync.
+FORGE V1 interface update for GitHub Pages / Android PWA.
 
-## Install on Android
-1. Put the contents of this folder on an HTTPS static host (for example, a private GitHub Pages site) or serve it from a local HTTPS development server.
-2. Open the site in Chrome on your Android phone.
-3. Open Chrome menu ⋮ → **Install app** (or **Add to Home screen**).
-4. Launch FORGE from your home screen.
+## What's included in this update
+- Preserves the existing FORGE logo, app name, manifest identity and local project workspace.
+- Adds creator dashboard, community overview, messages, notifications and settings screens.
+- Adds light/dark theme toggle and local profile visibility preferences.
+- Adds project visibility choices (public, unlisted, private), external live-demo links, collaborator credits and creator-controlled download preference in the project editor.
+- Adds interface areas for likes, comments/replies, follows, bookmarks, reports, creator analytics, messaging, collaboration requests, account security and admin moderation.
+- Adds an update-aware service worker: network-first page refresh, old cache cleanup and an in-app update prompt.
 
-A PWA must be served from HTTPS (or localhost) for reliable installation and offline caching. Opening `index.html` directly from a file manager lets you try the app, but does not provide full PWA installation/offline behavior.
+## Important: preview vs. live multi-user features
+This is the **interface-first V1 preview**. The existing project data, likes and bookmarks still use this browser's local storage. It does not yet provide real accounts, phone OTP, shared cloud projects, cross-user likes/comments/follows, messaging, notifications, server-side moderation, cloud file storage or enforced permissions. Those features must be connected to Firebase and protected by Firestore/Storage security rules before public use.
 
-## Features
-- Add, edit, and delete projects (delete by editing? use browser data reset; current build supports create/edit; no server-side sync)
-- Draft/published status, categories, technology tags, demo/GitHub links
-- Image covers (up to 1.2 MB each)
-- Search, category filtering, sorting
-- Local bookmarks and favourites
-- Editable creator profile
-- Dark/light theme
-- Export personal data as JSON
-- Responsive mobile UI and offline shell cache
+The project attachment picker currently records selected file names and basic metadata only; it does not upload or persist file contents. Do not treat that as cloud storage. The creator's download preference is saved locally as a UI setting until backend enforcement is implemented.
 
-## Privacy
-Everything stays in this browser's local storage. Clearing browser site data will erase your workspace. Use **Export my data** for backups. No uploaded project code is executed.
+Public / unlisted / private visibility is represented in the local preview; secure access enforcement requires Firebase rules. A project's collaborator credit does not grant editing rights. Project editing and deletion remain creator-owned in this preview.
 
+## Deploy to GitHub Pages
+1. Keep a backup of your current repository files.
+2. Extract this ZIP.
+3. Open the extracted `FORGE-Creat-Conquer-Rule-main` folder.
+4. Upload the **contents of that folder** to the root of your existing GitHub Pages repository, replacing the old files when GitHub asks.
+5. Commit the changes and wait for GitHub Pages to publish.
+6. Open the same FORGE website address. The installed home-screen PWA should update its cached page when it next connects and refreshes. If the update banner appears, tap **Update**.
 
-Branding: the official FORGE logo is used as `icon.png` for the app icon, browser icon, and in-app header.
-
-
-Logo update: the official FORGE logo is provided as icon-forge-192.png and icon-forge-512.png. The app references these new filenames and uses cache version v3 so older cached logo assets can be replaced.
+Keep the same repository and published URL. Do not delete the existing home-screen app. If Android continues showing an old page, close FORGE, open it again while online, and allow the service worker to refresh.
