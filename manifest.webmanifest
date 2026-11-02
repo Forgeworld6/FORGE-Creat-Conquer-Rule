@@ -8,7 +8,13 @@
   "description": "Your personal project workspace",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "icon-forge-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-forge-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

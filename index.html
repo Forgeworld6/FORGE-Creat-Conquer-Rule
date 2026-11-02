@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080808"><meta name="description" content="FORGE — Build. Showcase. Inspire.">
-<link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" sizes="512x512" href="icon.png"><link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.webmanifest?v=3"><link rel="icon" type="image/png" sizes="512x512" href="icon-forge-512.png"><link rel="apple-touch-icon" href="icon-forge-512.png">
 <title>FORGE — Build. Showcase. Inspire.</title>
 <style>
 :root{color-scheme:dark;--bg:#080808;--panel:#111;--card:#181818;--line:#292929;--txt:#fff;--muted:#a1a1aa;--orange:#ff7518;--orange2:#ff9d00;--soft:rgba(255,117,24,.12)}
@@ -33,7 +33,7 @@ main{padding:22px 18px 35px}.eyebrow{color:var(--orange);font-size:11px;font-wei
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style></head>
 <body><div class="app">
-<header><div class="brand"><img class="brandmark" src="icon.png" alt="FORGE logo"><div>FORGE<small>BUILD. SHOWCASE. INSPIRE.</small></div></div><div class="top-actions"><button class="icon" id="themeBtn" aria-label="Toggle theme">☼</button><button class="icon" id="addTop" aria-label="Add project">＋</button></div></header>
+<header><div class="brand"><img class="brandmark" src="icon-forge-512.png" alt="FORGE logo"><div>FORGE<small>BUILD. SHOWCASE. INSPIRE.</small></div></div><div class="top-actions"><button class="icon" id="themeBtn" aria-label="Toggle theme">☼</button><button class="icon" id="addTop" aria-label="Add project">＋</button></div></header>
 <main>
 <section id="home" class="page active">
 <div class="hero"><div class="hero-copy"><div class="eyebrow">YOUR CREATIVE WORKSPACE</div><h1>YOUR IDEAS<br>DESERVE TO <span>BE SEEN.</span></h1><p>A personal space to build, organize and showcase everything you create.</p><button class="btn" id="heroAdd">＋ Add your first project</button></div></div>
@@ -71,5 +71,5 @@ $('themeBtn').onclick=()=>{let t=document.documentElement.dataset.theme==='light
 $('editProfile').onclick=()=>{$('nameInput').value=profile.name;$('bioInput').value=profile.bio;$('profileModal').classList.add('show')};$('cancelProfile').onclick=()=>$('profileModal').classList.remove('show');$('saveProfile').onclick=()=>{profile={name:$('nameInput').value.trim()||'Creator',bio:$('bioInput').value.trim()};persist();render();$('profileModal').classList.remove('show');toast('Profile updated')};
 $('exportBtn').onclick=()=>{let blob=new Blob([JSON.stringify({projects:db,saved:[...saved],likes:[...likes],profile},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='forge-backup.json';a.click();URL.revokeObjectURL(a.href)};
 let theme=localStorage.getItem('forge_theme')||'dark';document.documentElement.dataset.theme=theme;$('themeBtn').textContent=theme==='light'?'☾':'☼';render();
-if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=3').catch(()=>{});
 </script></body></html>

@@ -26,3 +26,6 @@ Everything stays in this browser's local storage. Clearing browser site data wil
 
 
 Branding: the official FORGE logo is used as `icon.png` for the app icon, browser icon, and in-app header.
+
+
+Logo update: the official FORGE logo is provided as icon-forge-192.png and icon-forge-512.png. The app references these new filenames and uses cache version v3 so older cached logo assets can be replaced.
