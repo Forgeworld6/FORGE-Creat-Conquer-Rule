@@ -185,7 +185,7 @@ if (!ready()) {
    }
   });
   status("Enter your phone number with country code.");
- } catch(e) { status("Firebase initialization failed. Check your Web App config.", "error"); }
+ } catch(e) { status(`Firebase initialization error: ${e.code || "unknown"} — ${e.message || "No additional details"}`, "error"); }
 
  sendBtn.addEventListener("click", async () => {
   const phone = phoneInput.value.trim();
@@ -210,7 +210,7 @@ if (!ready()) {
     "auth/too-many-requests":"Too many attempts. Please try again later.",
     "auth/quota-exceeded":"SMS quota reached. Try again later."
    };
-   status(map[e.code] || "Could not send OTP. Check Firebase Phone sign-in, authorized domain and internet connection.", "error");
+   status(map[e.code] || `Firebase error: ${e.code || "unknown"} — ${e.message || "No additional details"}`, "error");
   } finally { sendBtn.disabled = false; }
  });
  verifyBtn.addEventListener("click", async () => {
