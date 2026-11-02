@@ -23,3 +23,6 @@ A PWA must be served from HTTPS (or localhost) for reliable installation and off
 
 ## Privacy
 Everything stays in this browser's local storage. Clearing browser site data will erase your workspace. Use **Export my data** for backups. No uploaded project code is executed.
+
+
+Branding: the official FORGE logo is used as `icon.png` for the app icon, browser icon, and in-app header.

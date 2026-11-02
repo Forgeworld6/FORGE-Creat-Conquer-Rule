@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080808"><meta name="description" content="FORGE — Build. Showcase. Inspire.">
-<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" sizes="512x512" href="icon.png"><link rel="apple-touch-icon" href="icon.png">
 <title>FORGE — Build. Showcase. Inspire.</title>
 <style>
 :root{color-scheme:dark;--bg:#080808;--panel:#111;--card:#181818;--line:#292929;--txt:#fff;--muted:#a1a1aa;--orange:#ff7518;--orange2:#ff9d00;--soft:rgba(255,117,24,.12)}
@@ -11,7 +11,7 @@
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif;transition:background .25s,color .25s}
 button,input,textarea,select{font:inherit}button{cursor:pointer;color:inherit}.app{max-width:1120px;margin:auto;min-height:100dvh;padding-bottom:86px}
 header{height:68px;position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 20px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:1.8px;font-size:20px}.brandmark{width:32px;height:32px;border-radius:10px;background:linear-gradient(140deg,#ff3d00,#ff9d00);display:grid;place-items:center;color:#111;font-weight:1000;font-size:20px;box-shadow:0 5px 22px #ff751833}.brand small{display:block;font-size:8px;letter-spacing:2px;color:var(--muted);font-weight:600;margin-top:-3px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:1.8px;font-size:20px}.brandmark{width:38px;height:38px;border-radius:10px;object-fit:cover;display:block;box-shadow:0 5px 22px #ff751833}.brand small{display:block;font-size:8px;letter-spacing:2px;color:var(--muted);font-weight:600;margin-top:-3px}
 .top-actions{display:flex;gap:8px}.icon{border:1px solid var(--line);background:var(--panel);border-radius:12px;width:40px;height:40px;font-size:17px}
 main{padding:22px 18px 35px}.eyebrow{color:var(--orange);font-size:11px;font-weight:800;letter-spacing:2.2px;text-transform:uppercase}
 .hero{position:relative;overflow:hidden;padding:30px 24px;border:1px solid #382315;border-radius:24px;background:radial-gradient(ellipse at 90% 10%,#54250f 0,transparent 40%),linear-gradient(130deg,#17100c,#0d0d0d 65%);min-height:250px;display:flex;align-items:center}
@@ -33,7 +33,7 @@ main{padding:22px 18px 35px}.eyebrow{color:var(--orange);font-size:11px;font-wei
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style></head>
 <body><div class="app">
-<header><div class="brand"><div class="brandmark">F</div><div>FORGE<small>BUILD. SHOWCASE. INSPIRE.</small></div></div><div class="top-actions"><button class="icon" id="themeBtn" aria-label="Toggle theme">☼</button><button class="icon" id="addTop" aria-label="Add project">＋</button></div></header>
+<header><div class="brand"><img class="brandmark" src="icon.png" alt="FORGE logo"><div>FORGE<small>BUILD. SHOWCASE. INSPIRE.</small></div></div><div class="top-actions"><button class="icon" id="themeBtn" aria-label="Toggle theme">☼</button><button class="icon" id="addTop" aria-label="Add project">＋</button></div></header>
 <main>
 <section id="home" class="page active">
 <div class="hero"><div class="hero-copy"><div class="eyebrow">YOUR CREATIVE WORKSPACE</div><h1>YOUR IDEAS<br>DESERVE TO <span>BE SEEN.</span></h1><p>A personal space to build, organize and showcase everything you create.</p><button class="btn" id="heroAdd">＋ Add your first project</button></div></div>

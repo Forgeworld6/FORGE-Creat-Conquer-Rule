@@ -1,1 +1,17 @@
-{"name":"FORGE — Build. Showcase. Inspire.","short_name":"FORGE","start_url":"./index.html","display":"standalone","background_color":"#080808","theme_color":"#080808","description":"Your personal project workspace","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
+{
+  "name": "FORGE \u2014 Build. Showcase. Inspire.",
+  "short_name": "FORGE",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#080808",
+  "theme_color": "#080808",
+  "description": "Your personal project workspace",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
