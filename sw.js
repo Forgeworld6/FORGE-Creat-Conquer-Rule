@@ -1,4 +1,4 @@
-const CACHE = "forge-v1-phone-auth-2";
+const CACHE = "forge-v1-firestore-profile-1";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-forge-192.png", "./icon-forge-512.png"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));

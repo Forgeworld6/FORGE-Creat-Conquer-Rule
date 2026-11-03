@@ -95,12 +95,19 @@ main{padding:22px 18px 35px}.eyebrow{color:var(--orange);font-size:11px;font-wei
 <nav class="bottom"><button class="nav active" data-page="home"><span>⌂</span>Home</button><button class="nav" data-page="explore"><span>⌕</span>Explore</button><button class="nav" data-page="saved"><span>♡</span>Saved</button><button class="nav" data-page="profile"><span>◉</span>Profile</button><button class="nav" data-page="dashboard"><span>▥</span>Stats</button><button class="nav" data-page="community"><span>✦</span>Community</button><button class="nav" data-page="inbox"><span>✉</span>Inbox</button><button class="nav" data-page="notifications"><span>♧</span>Alerts</button><button class="nav" data-page="settings"><span>⚙</span>Settings</button></nav>
 </div>
 <div class="modal-back" id="projectModal"><div class="modal"><h2 id="modalTitle">Create project</h2><form id="projectForm"><input type="hidden" id="projectId"><label class="field"><span>Project title *</span><input id="title" required maxlength="70" placeholder="e.g. Smart Attendance App"></label><label class="field"><span>Description</span><textarea id="description" maxlength="500" placeholder="What did you build?"></textarea></label><label class="field"><span>Category</span><select id="category"><option>Web Development</option><option>App Development</option><option>AI & Machine Learning</option><option>Game Development</option><option>UI/UX Design</option><option>Robotics</option><option>IoT & Electronics</option><option>Software Development</option><option>Other</option></select></label><label class="field"><span>Technologies (comma separated)</span><input id="technologies" placeholder="React, Python, Figma"></label><label class="field"><span>Live demo link</span><input id="demo" type="url" placeholder="https://..."></label><label class="field"><span>GitHub link</span><input id="github" type="url" placeholder="https://github.com/..."></label><label class="field"><span>Collaborator credits (creator names, comma separated)</span><input id="collaborators" placeholder="Alex, Sam"></label><label class="field"><span>Cover image (optional)</span><input id="image" type="file" accept="image/*"></label><label class="field"><span>Project files (code, ZIP, PDF or images)</span><input id="attachments" type="file" multiple accept=".c,.cpp,.py,.java,.zip,.pdf,image/*"></label><label class="field"><span>Project visibility</span><select id="visibility"><option value="public">Public</option><option value="unlisted">Unlisted</option><option value="private">Private</option></select></label><label class="field"><span>Allow project file downloads?</span><select id="downloads"><option value="yes">Creator allows downloads</option><option value="no">Preview only / downloads disabled</option></select></label><label class="field"><span>Status</span><select id="status"><option value="published">Published</option><option value="draft">Draft</option></select></label><div class="modal-actions"><button type="button" class="btn secondary" id="cancelModal">Cancel</button><button class="btn" type="submit">Save project</button></div></form></div></div>
-<div class="modal-back" id="profileModal"><div class="modal"><h2>Edit profile</h2><label class="field"><span>Your name</span><input id="nameInput" maxlength="40"></label><label class="field"><span>Short bio</span><textarea id="bioInput" maxlength="160"></textarea></label><div class="modal-actions"><button class="btn secondary" id="cancelProfile">Cancel</button><button class="btn" id="saveProfile">Save profile</button></div></div></div>
+<div class="modal-back" id="profileModal"><div class="modal"><h2>Edit profile</h2><label class="field"><span>Your name</span><input id="nameInput" maxlength="40"></label><label class="field"><span>Short bio</span><textarea id="bioInput" maxlength="160"></textarea></label><label class="field"><span>Skills and technologies (comma separated)</span><input id="skillsInput" maxlength="300" placeholder="JavaScript, Python, UI/UX"></label><div class="modal-actions"><button class="btn secondary" id="cancelProfile">Cancel</button><button class="btn" id="saveProfile">Save profile</button></div></div></div>
 <div class="toast" id="toast"></div><div class="update-banner" id="updateBanner"><span>A new FORGE version is ready.</span><button class="btn" id="refreshApp">Update</button></div>
 <script>
 const $=id=>document.getElementById(id), CATS=['All','Web Development','App Development','AI & Machine Learning','Game Development','UI/UX Design','Robotics','IoT & Electronics','Software Development','Other'];
 let db=JSON.parse(localStorage.getItem('forge_projects')||'[]'), saved=new Set(JSON.parse(localStorage.getItem('forge_saved')||'[]')), likes=new Set(JSON.parse(localStorage.getItem('forge_likes')||'[]')), profile=JSON.parse(localStorage.getItem('forge_profile')||'{"name":"Your name","bio":"Building things one idea at a time."}'), activeCat='All',sortNewest=true,homeSearch='';
 const persist=()=>{localStorage.setItem('forge_projects',JSON.stringify(db));localStorage.setItem('forge_saved',JSON.stringify([...saved]));localStorage.setItem('forge_likes',JSON.stringify([...likes]));localStorage.setItem('forge_profile',JSON.stringify(profile));};
+window.forgeApplyProfile = data => {
+ profile = {...profile, name:data.name || 'Creator', bio:data.bio || '', skills:Array.isArray(data.skills)?data.skills:[]};
+ persist();
+ $('profileName').textContent=profile.name;
+ $('profileBio').textContent=profile.bio;
+ $('avatarLetter').textContent=(profile.name||'F').trim().charAt(0).toUpperCase();
+};
 function toast(s){let t=$('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
 function safe(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function filters(target){$(target).innerHTML=CATS.map(c=>`<button class="chip ${c===activeCat?'active':''}" data-cat="${safe(c)}">${safe(c)}</button>`).join('')}
@@ -114,7 +121,7 @@ document.body.addEventListener('click',e=>{let b=e.target.closest('button');if(!
 $('addTop').onclick=$('heroAdd').onclick=()=>openProject();$('cancelModal').onclick=closeProject;$('projectModal').addEventListener('click',e=>{if(e.target===$('projectModal'))closeProject()});
 $('searchHome').oninput=e=>{homeSearch=e.target.value.toLowerCase();render()};$('searchExplore').oninput=e=>{let q=e.target.value.toLowerCase();$('exploreGrid').innerHTML=db.filter(p=>p.status==='published'&&[p.title,p.description,...p.technologies].join(' ').toLowerCase().includes(q)).map(card).join('')||'<div class="empty">No matching projects found.</div>'};$('sortBtn').onclick=()=>{sortNewest=!sortNewest;$('sortBtn').textContent=sortNewest?'Latest ↓':'A–Z ↑';render()};
 $('themeBtn').onclick=()=>{let t=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=t;localStorage.setItem('forge_theme',t);$('themeBtn').textContent=t==='light'?'☾':'☼'};
-$('editProfile').onclick=()=>{$('nameInput').value=profile.name;$('bioInput').value=profile.bio;$('profileModal').classList.add('show')};$('cancelProfile').onclick=()=>$('profileModal').classList.remove('show');$('saveProfile').onclick=()=>{profile={name:$('nameInput').value.trim()||'Creator',bio:$('bioInput').value.trim()};persist();render();$('profileModal').classList.remove('show');toast('Profile updated')};
+$('editProfile').onclick=()=>{$('nameInput').value=profile.name||'';$('bioInput').value=profile.bio||'';$('skillsInput').value=(profile.skills||[]).join(', ');$('profileModal').classList.add('show')};$('cancelProfile').onclick=()=>$('profileModal').classList.remove('show');$('saveProfile').onclick=async()=>{profile={...profile,name:$('nameInput').value.trim()||'Creator',bio:$('bioInput').value.trim(),skills:$('skillsInput').value.split(',').map(x=>x.trim()).filter(Boolean)};persist();render();$('profileModal').classList.remove('show');if(window.forgeSaveProfile){try{await window.forgeSaveProfile(profile);toast('Profile saved to your FORGE account')}catch(e){toast('Saved on this device; cloud save failed: '+(e.code||'check Firestore rules'))}}else toast('Profile saved on this device')};
 $('exportBtn').onclick=()=>{let blob=new Blob([JSON.stringify({projects:db,saved:[...saved],likes:[...likes],profile},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='forge-backup.json';a.click();URL.revokeObjectURL(a.href)};
 let theme=localStorage.getItem('forge_theme')||'dark';document.documentElement.dataset.theme=theme;$('themeBtn').textContent=theme==='light'?'☾':'☼';render();
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){
@@ -135,9 +142,9 @@ $('dashProjects').textContent=db.length;
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-/* Paste your Firebase Web App config here (Project settings > Your apps).
-   Never put a service-account private key in browser code. */
 const firebaseConfig = {
   apiKey: "AIzaSyCyq2ujplmYRK0yCg2DD-VrIQFn_OWRKSI",
   authDomain: "forgeworld6.firebaseapp.com",
@@ -153,82 +160,119 @@ const phoneStep = $auth("authPhoneStep"), otpStep = $auth("authOtpStep");
 const phoneInput = $auth("authPhone"), otpInput = $auth("authOtp");
 const sendBtn = $auth("sendOtpBtn"), verifyBtn = $auth("verifyOtpBtn");
 const changeBtn = $auth("changePhoneBtn"), logoutBtn = $auth("logoutBtn");
-let auth, confirmation, verifier;
+let auth, confirmation, verifier, firestore, activeUser;
 
 function status(message, kind="") {
   statusBox.textContent = message;
   statusBox.className = "auth-status" + (kind ? " " + kind : "");
 }
-function ready() {
- return firebaseConfig.apiKey !== "PASTE_API_KEY_HERE" &&
-        firebaseConfig.projectId !== "PASTE_PROJECT_ID_HERE" &&
-        firebaseConfig.appId !== "PASTE_APP_ID_HERE";
-}
 function clearCaptcha() {
  if (verifier) { try { verifier.clear(); } catch(e) {} verifier = null; }
  $auth("recaptcha-container").innerHTML = "";
 }
-if (!ready()) {
- status("Firebase Web App configuration is missing. Add your project config to activate phone OTP.", "error");
- sendBtn.disabled = true;
- sendBtn.textContent = "Firebase setup required";
-} else {
- try {
-  auth = getAuth(initializeApp(firebaseConfig));
-  onAuthStateChanged(auth, user => {
-   if (user) {
-    gate.style.display = "none"; shell.style.display = "";
-    $auth("authUser").textContent = user.phoneNumber || "Signed in";
-   } else {
-    shell.style.display = "none"; gate.style.display = "flex";
-    $auth("authUser").textContent = "";
-   }
+function paintProfile(data) {
+  if (window.forgeApplyProfile) window.forgeApplyProfile({
+    name:data.name || "Creator",
+    bio:data.bio || "Building things one idea at a time.",
+    skills:Array.isArray(data.skills)?data.skills:[]
   });
-  status("Enter your phone number with country code.");
- } catch(e) { status(`Firebase initialization error: ${e.code || "unknown"} — ${e.message || "No additional details"}`, "error"); }
-
- sendBtn.addEventListener("click", async () => {
-  const phone = phoneInput.value.trim();
-  if (!/^\+[1-9]\d{7,14}$/.test(phone)) {
-   status("Enter a valid number with country code, for example +91XXXXXXXXXX.", "error"); return;
+}
+window.forgeSaveProfile = async (profileData) => {
+  if (!activeUser) throw new Error("Not signed in");
+  await setDoc(doc(firestore, "users", activeUser.uid), {
+    name: profileData.name || "Creator",
+    bio: profileData.bio || "",
+    skills: Array.isArray(profileData.skills) ? profileData.skills : [],
+    phoneNumber: activeUser.phoneNumber || "",
+    updatedAt: serverTimestamp()
+  }, {merge:true});
+};
+async function loadOrCreateProfile(user) {
+  const ref = doc(firestore, "users", user.uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) {
+    const initial = {
+      name: "Creator",
+      bio: "Building things one idea at a time.",
+      skills: [],
+      phoneNumber: user.phoneNumber || "",
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    };
+    await setDoc(ref, initial);
+    paintProfile(initial);
+    status("Your FORGE profile has been created.", "ok");
+  } else {
+    paintProfile(snap.data());
+    status("Welcome back to FORGE.", "ok");
   }
-  sendBtn.disabled = true;
-  try {
+}
+try {
+ const app = initializeApp(firebaseConfig);
+ auth = getAuth(app);
+ firestore = getFirestore(app);
+ onAuthStateChanged(auth, async user => {
+   activeUser = user || null;
+   if (user) {
+     gate.style.display = "none"; shell.style.display = "";
+     $auth("authUser").textContent = user.phoneNumber || "Signed in";
+     try { await loadOrCreateProfile(user); }
+     catch(e) {
+       console.error("FORGE profile load/create failed", e);
+       toast("Profile cloud setup failed: " + (e.code || e.message || "unknown error"));
+       paintProfile(JSON.parse(localStorage.getItem("forge_profile") || '{"name":"Creator","bio":""}'));
+     }
+   } else {
+     shell.style.display = "none"; gate.style.display = "flex";
+     $auth("authUser").textContent = "";
+   }
+ });
+ status("Enter your phone number with country code.");
+} catch(e) {
+ status(`Firebase initialization error: ${e.code || "unknown"} — ${e.message || "No additional details"}`, "error");
+ sendBtn.disabled = true;
+}
+sendBtn.addEventListener("click", async () => {
+ const phone = phoneInput.value.trim();
+ if (!/^\+[1-9]\d{7,14}$/.test(phone)) {
+   status("Enter a valid number with country code, for example +91XXXXXXXXXX.", "error"); return;
+ }
+ sendBtn.disabled = true;
+ try {
    clearCaptcha();
    verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-    size: "normal",
-    "expired-callback": () => status("reCAPTCHA expired. Please try again.", "error")
+     size: "normal",
+     "expired-callback": () => status("reCAPTCHA expired. Please try again.", "error")
    });
    await verifier.render();
    confirmation = await signInWithPhoneNumber(auth, phone, verifier);
    phoneStep.hidden = true; otpStep.hidden = false;
    status("OTP sent. Check your SMS messages.", "ok"); otpInput.focus();
-  } catch(e) {
+ } catch(e) {
    clearCaptcha();
    const map = {
-    "auth/invalid-phone-number":"That phone number is not valid.",
-    "auth/too-many-requests":"Too many attempts. Please try again later.",
-    "auth/quota-exceeded":"SMS quota reached. Try again later."
+     "auth/invalid-phone-number":"That phone number is not valid.",
+     "auth/too-many-requests":"Too many attempts. Please try again later.",
+     "auth/quota-exceeded":"SMS quota reached. Try again later."
    };
    status(map[e.code] || `Firebase error: ${e.code || "unknown"} — ${e.message || "No additional details"}`, "error");
-  } finally { sendBtn.disabled = false; }
- });
- verifyBtn.addEventListener("click", async () => {
-  const code = otpInput.value.trim();
-  if (!/^\d{6}$/.test(code)) { status("Enter the 6-digit code from your SMS.", "error"); return; }
-  verifyBtn.disabled = true;
-  try { await confirmation.confirm(code); status("Phone verified. Opening FORGE…", "ok"); }
-  catch(e) { status(e.code === "auth/invalid-verification-code" ? "Incorrect OTP. Try again." : "Verification failed. Request a new code.", "error"); }
-  finally { verifyBtn.disabled = false; }
- });
- changeBtn.addEventListener("click", () => {
-  confirmation = null; otpInput.value = ""; otpStep.hidden = true; phoneStep.hidden = false;
-  clearCaptcha(); status("Enter your phone number again.");
- });
- logoutBtn.addEventListener("click", async () => {
-  try { await signOut(auth); } catch(e) { alert("Could not sign out. Please try again."); }
- });
-}
+ } finally { sendBtn.disabled = false; }
+});
+verifyBtn.addEventListener("click", async () => {
+ const code = otpInput.value.trim();
+ if (!/^\d{6}$/.test(code)) { status("Enter the 6-digit code from Firebase test numbers.", "error"); return; }
+ verifyBtn.disabled = true;
+ try { await confirmation.confirm(code); status("Phone verified. Opening FORGE…", "ok"); }
+ catch(e) { status(e.code === "auth/invalid-verification-code" ? "Incorrect OTP. Try again." : `Verification failed: ${e.code || e.message}`, "error"); }
+ finally { verifyBtn.disabled = false; }
+});
+changeBtn.addEventListener("click", () => {
+ confirmation = null; otpInput.value = ""; otpStep.hidden = true; phoneStep.hidden = false;
+ clearCaptcha(); status("Enter your phone number again.");
+});
+logoutBtn.addEventListener("click", async () => {
+ try { await signOut(auth); } catch(e) { alert("Could not sign out. Please try again."); }
+});
 </script>
 
 </body></html>
